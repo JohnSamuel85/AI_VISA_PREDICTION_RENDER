@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VisaAI SaaS Platform</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="header">
+    <h1>VisaAI Decision Intelligence Platform</h1>
+</div>
+
+<div class="card">
+<form id="visaForm">
+
+<input type="number" name="age" placeholder="Age" required>
+
+<select name="visa_type" required>
+<option value="">Visa Type</option>
+<option value="Student">Student</option>
+<option value="Work">Work</option>
+<option value="Tourist">Tourist</option>
+<option value="Business">Business</option>
+</select>
+
+<select name="applied_month" required>
+<option value="">Applied Month</option>
+<option value="1">January</option>
+<option value="6">June</option>
+<option value="12">December</option>
+</select>
+
+<select name="financial_status" required>
+<option value="">Financial Strength</option>
+<option value="1">Low</option>
+<option value="2">Moderate</option>
+<option value="3">Strong</option>
+</select>
+
+<input type="text" name="nationality" placeholder="Nationality" required>
+<input type="text" name="destination_country" placeholder="Destination Country" required>
+<input type="number" name="experience" placeholder="Experience (Years)" required>
+<input type="number" name="education_level" placeholder="Education Level (1-5)" required>
+<input type="number" name="previous_rejections" placeholder="Previous Rejections" required>
+
+<button type="submit">Run Analysis</button>
+</form>
+</div>
+
+<div class="result" id="result"></div>
+
+<script>
+document.getElementById("visaForm").addEventListener("submit", async function(e){
+e.preventDefault();
+const formData = new FormData(this);
+
+const response = await fetch("/predict", {method:"POST", body:formData});
+const data = await response.json();
+
+document.getElementById("result").innerHTML = `
+<h2>Status: ${data.visa_status}</h2>
+<h3>Confidence: ${data.confidence}%</h3>
+<h4>Processing Time: ${data.processing_days} days</h4>
+<p>${data.ai_explanation}</p>
+`;
+});
+</script>
+
+</body>
+</html>
